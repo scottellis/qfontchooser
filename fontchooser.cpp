@@ -17,7 +17,8 @@ FontChooser::FontChooser(QWidget *parent)
 	connect(m_sizeCombo, SIGNAL(currentIndexChanged(const QString &)), SLOT(sizeChanged(const QString &)));
 	connect(m_bkgdCombo, SIGNAL(currentIndexChanged(const QString &)), SLOT(backgroundChanged(const QString &)));
 
-	m_sizeCombo->setCurrentText("12");
+	m_sizeCombo->setCurrentText("14");
+	m_bkgdCombo->setCurrentText("Light");
 
 	restoreWindowState();
 }
@@ -51,7 +52,7 @@ void FontChooser::layoutWindow()
 {
 	m_fontCombo = new QFontComboBox;
 	m_sizeCombo = new QComboBox;
-	m_sizeCombo->setMaximumWidth(40);
+	m_sizeCombo->setMaximumWidth(60);
 
 	m_sizeCombo->addItem("8");
 	m_sizeCombo->addItem("9");
@@ -67,7 +68,7 @@ void FontChooser::layoutWindow()
 	m_sizeCombo->addItem("28");
 
 	m_bkgdCombo = new QComboBox;
-	m_bkgdCombo->setMaximumWidth(80);
+	m_bkgdCombo->setMaximumWidth(100);
 
 	m_bkgdCombo->addItem("Light");
 	m_bkgdCombo->addItem("Dark");
