@@ -52,7 +52,10 @@ void FontChooser::layoutWindow()
 	m_sizeCombo->addItem("16");
 	m_sizeCombo->addItem("18");
 	m_sizeCombo->addItem("20");
+	m_sizeCombo->addItem("22");
 	m_sizeCombo->addItem("24");
+	m_sizeCombo->addItem("26");
+	m_sizeCombo->addItem("28");
 
 	m_sampleEdit = new QTextEdit;
 	m_exitBtn = new QPushButton("Exit");
