@@ -15,6 +15,7 @@ FontChooser::FontChooser(QWidget *parent)
 	connect(m_exitBtn, SIGNAL(pressed()), SLOT(close()));
 	connect(m_fontCombo, SIGNAL(currentFontChanged(const QFont &)), SLOT(fontChanged(const QFont &)));
 	connect(m_sizeCombo, SIGNAL(currentIndexChanged(const QString &)), SLOT(sizeChanged(const QString &)));
+	connect(m_bkgdCombo, SIGNAL(currentIndexChanged(const QString &)), SLOT(backgroundChanged(const QString &)));
 
 	m_sizeCombo->setCurrentText("12");
 
@@ -38,11 +39,19 @@ void FontChooser::sizeChanged(const QString &text)
 	m_sampleEdit->setFont(newFont);
 }
 
+void FontChooser::backgroundChanged(const QString &text)
+{
+	if (text == "Light")
+		m_sampleEdit->setStyleSheet("color: black; background-color: white");
+	else
+		m_sampleEdit->setStyleSheet("color: white; background-color: black");
+}
+
 void FontChooser::layoutWindow()
 {
 	m_fontCombo = new QFontComboBox;
 	m_sizeCombo = new QComboBox;
-	m_sizeCombo->setMaximumWidth(60);
+	m_sizeCombo->setMaximumWidth(40);
 
 	m_sizeCombo->addItem("8");
 	m_sizeCombo->addItem("9");
@@ -57,6 +66,12 @@ void FontChooser::layoutWindow()
 	m_sizeCombo->addItem("26");
 	m_sizeCombo->addItem("28");
 
+	m_bkgdCombo = new QComboBox;
+	m_bkgdCombo->setMaximumWidth(80);
+
+	m_bkgdCombo->addItem("Light");
+	m_bkgdCombo->addItem("Dark");
+
 	m_sampleEdit = new QTextEdit;
 	m_exitBtn = new QPushButton("Exit");
 
@@ -66,20 +81,20 @@ void FontChooser::layoutWindow()
 	                       "Through caverns measureless to man\n" \
 	                       "   Down to a sunless sea.\n"); 
 
-	QFormLayout *formLayout = new QFormLayout;
+	QVBoxLayout *vLayout = new QVBoxLayout;
 
+	QFormLayout *formLayout = new QFormLayout;
 	formLayout->addRow("Font", m_fontCombo);
 	formLayout->addRow("Size", m_sizeCombo);
+	formLayout->addRow("Background", m_bkgdCombo);
+	vLayout->addLayout(formLayout);
+
+	vLayout->addWidget(m_sampleEdit);
 
 	QHBoxLayout *hLayout = new QHBoxLayout;
 	hLayout->addStretch();
 	hLayout->addWidget(m_exitBtn);
 	hLayout->addStretch();
-
-	QVBoxLayout *vLayout = new QVBoxLayout;
-
-	vLayout->addLayout(formLayout);
-	vLayout->addWidget(m_sampleEdit);
 	vLayout->addLayout(hLayout);
 
 	centralWidget()->setLayout(vLayout);
