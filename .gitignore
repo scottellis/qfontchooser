@@ -1,0 +1,12 @@
+qfontchooser
+Makefile
+GeneratedFiles/
+Objects/
+Debug/
+Release/
+Win32/
+ipch/
+*.user
+*.opensdf
+*.sdf
+*.suo
