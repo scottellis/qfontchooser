@@ -17,7 +17,7 @@ FontChooser::FontChooser(QWidget *parent)
     connect(m_sizeCombo, SIGNAL(currentIndexChanged(const QString &)), SLOT(sizeChanged(const QString &)));
     connect(m_bkgdCombo, SIGNAL(currentIndexChanged(const QString &)), SLOT(backgroundChanged(const QString &)));
 
-    m_sizeCombo->setCurrentText("14");
+    m_sizeCombo->setCurrentText("32");
     m_bkgdCombo->setCurrentText("Light");
 
     restoreWindowState();
