@@ -52,7 +52,7 @@ void FontChooser::layoutWindow()
 {
     m_fontCombo = new QFontComboBox;
     m_sizeCombo = new QComboBox;
-    m_sizeCombo->setMaximumWidth(60);
+    m_sizeCombo->setMaximumWidth(80);
 
     m_sizeCombo->addItem("10");
     m_sizeCombo->addItem("12");
