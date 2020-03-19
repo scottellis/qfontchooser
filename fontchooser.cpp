@@ -54,8 +54,6 @@ void FontChooser::layoutWindow()
     m_sizeCombo = new QComboBox;
     m_sizeCombo->setMaximumWidth(60);
 
-    m_sizeCombo->addItem("8");
-    m_sizeCombo->addItem("9");
     m_sizeCombo->addItem("10");
     m_sizeCombo->addItem("12");
     m_sizeCombo->addItem("14");
@@ -66,6 +64,11 @@ void FontChooser::layoutWindow()
     m_sizeCombo->addItem("24");
     m_sizeCombo->addItem("26");
     m_sizeCombo->addItem("28");
+    m_sizeCombo->addItem("32");
+    m_sizeCombo->addItem("36");
+    m_sizeCombo->addItem("40");
+    m_sizeCombo->addItem("44");
+    m_sizeCombo->addItem("48");
 
     m_bkgdCombo = new QComboBox;
     m_bkgdCombo->setMaximumWidth(100);
@@ -87,7 +90,7 @@ void FontChooser::layoutWindow()
     QFormLayout *formLayout = new QFormLayout;
     formLayout->addRow("Font", m_fontCombo);
     formLayout->addRow("Size", m_sizeCombo);
-    formLayout->addRow("Background", m_bkgdCombo);
+    // formLayout->addRow("Background", m_bkgdCombo);
     vLayout->addLayout(formLayout);
 
     vLayout->addWidget(m_sampleEdit);
