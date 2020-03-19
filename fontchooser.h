@@ -11,32 +11,32 @@
 
 class FontChooser : public QMainWindow
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	FontChooser(QWidget *parent = 0);
+    FontChooser(QWidget *parent = 0);
 
 protected:
-	void closeEvent(QCloseEvent *);
+    void closeEvent(QCloseEvent *);
 
 protected slots:
-	void fontChanged(const QFont &font);
-	void sizeChanged(const QString &text);
-	void backgroundChanged(const QString &text);
+    void fontChanged(const QFont &font);
+    void sizeChanged(const QString &text);
+    void backgroundChanged(const QString &text);
 
 private:
-	void layoutWindow();
+    void layoutWindow();
     void restoreWindowState();
     void saveWindowState();
-	QString settingsFile();
+    QString settingsFile();
 
-	Ui::FontChooserClass ui;
+    Ui::FontChooserClass ui;
 
-	QFontComboBox *m_fontCombo;
-	QComboBox *m_sizeCombo;
-	QComboBox *m_bkgdCombo;
-	QTextEdit *m_sampleEdit;
-	QPushButton *m_exitBtn;
+    QFontComboBox *m_fontCombo;
+    QComboBox *m_sizeCombo;
+    QComboBox *m_bkgdCombo;
+    QTextEdit *m_sampleEdit;
+    QPushButton *m_exitBtn;
 };
 
 #endif // FONTCHOOSER_H
