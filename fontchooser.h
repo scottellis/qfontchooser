@@ -16,12 +16,10 @@ class FontChooser : public QMainWindow
 public:
     FontChooser(QWidget *parent = 0);
 
-protected:
-    void closeEvent(QCloseEvent *);
-
 protected slots:
     void fontChanged(const QFont &font);
     void sizeChanged(const QString &text);
+    void onExit();
 
 private:
     void layoutWindow();
