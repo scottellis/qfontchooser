@@ -22,7 +22,6 @@ protected:
 protected slots:
     void fontChanged(const QFont &font);
     void sizeChanged(const QString &text);
-    void backgroundChanged(const QString &text);
 
 private:
     void layoutWindow();
@@ -34,8 +33,7 @@ private:
 
     QFontComboBox *m_fontCombo;
     QComboBox *m_sizeCombo;
-    QComboBox *m_bkgdCombo;
-    QTextEdit *m_sampleEdit;
+    QTextEdit *m_edit;
     QPushButton *m_exitBtn;
 };
 

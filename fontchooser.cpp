@@ -15,10 +15,6 @@ FontChooser::FontChooser(QWidget *parent)
     connect(m_exitBtn, SIGNAL(pressed()), SLOT(close()));
     connect(m_fontCombo, SIGNAL(currentFontChanged(const QFont &)), SLOT(fontChanged(const QFont &)));
     connect(m_sizeCombo, SIGNAL(currentIndexChanged(const QString &)), SLOT(sizeChanged(const QString &)));
-    connect(m_bkgdCombo, SIGNAL(currentIndexChanged(const QString &)), SLOT(backgroundChanged(const QString &)));
-
-    m_sizeCombo->setCurrentText("32");
-    m_bkgdCombo->setCurrentText("Light");
 
     restoreWindowState();
 }
@@ -28,31 +24,22 @@ void FontChooser::fontChanged(const QFont &font)
     QFont newFont(font);
     int size = m_sizeCombo->currentText().toInt();
     newFont.setPixelSize(size);
-    m_sampleEdit->setFont(newFont);
-    update();
+    m_edit->setFont(newFont);
 }
 
 void FontChooser::sizeChanged(const QString &text)
 {
     int size = text.toInt();
-    QFont newFont(m_sampleEdit->font());
+    QFont newFont(m_edit->font());
     newFont.setPixelSize(size);
-    m_sampleEdit->setFont(newFont);
-}
-
-void FontChooser::backgroundChanged(const QString &text)
-{
-    if (text == "Light")
-    	m_sampleEdit->setStyleSheet("color: black; background-color: white");
-    else
-    	m_sampleEdit->setStyleSheet("color: white; background-color: black");
+    m_edit->setFont(newFont);
 }
 
 void FontChooser::layoutWindow()
 {
     m_fontCombo = new QFontComboBox;
     m_sizeCombo = new QComboBox;
-    m_sizeCombo->setMaximumWidth(80);
+    m_sizeCombo->setMaximumWidth(64);
 
     m_sizeCombo->addItem("10");
     m_sizeCombo->addItem("12");
@@ -70,16 +57,10 @@ void FontChooser::layoutWindow()
     m_sizeCombo->addItem("44");
     m_sizeCombo->addItem("48");
 
-    m_bkgdCombo = new QComboBox;
-    m_bkgdCombo->setMaximumWidth(100);
-
-    m_bkgdCombo->addItem("Light");
-    m_bkgdCombo->addItem("Dark");
-
-    m_sampleEdit = new QTextEdit;
+    m_edit = new QTextEdit;
     m_exitBtn = new QPushButton("Exit");
 
-    m_sampleEdit->setText("In Xanadu did Kubla Khan\n" \
+    m_edit->setText("In Xanadu did Kubla Khan\n" \
                            "A stately pleasure-dome decree:\n" \
                            "Where Alph, the sacred river, ran\n" \
                            "Through caverns measureless to man\n" \
@@ -87,15 +68,21 @@ void FontChooser::layoutWindow()
 
     QVBoxLayout *vLayout = new QVBoxLayout;
 
+    QHBoxLayout *hLayout = new QHBoxLayout;
+
     QFormLayout *formLayout = new QFormLayout;
     formLayout->addRow("Font", m_fontCombo);
+    hLayout->addLayout(formLayout);
+
+    formLayout = new QFormLayout;
     formLayout->addRow("Size", m_sizeCombo);
-    // formLayout->addRow("Background", m_bkgdCombo);
-    vLayout->addLayout(formLayout);
+    hLayout->addLayout(formLayout);
 
-    vLayout->addWidget(m_sampleEdit);
+    vLayout->addLayout(hLayout);
 
-    QHBoxLayout *hLayout = new QHBoxLayout;
+    vLayout->addWidget(m_edit);
+
+    hLayout = new QHBoxLayout;
     hLayout->addStretch();
     hLayout->addWidget(m_exitBtn);
     hLayout->addStretch();
@@ -124,10 +111,21 @@ void FontChooser::restoreWindowState()
     settings->beginGroup("Window");
     restoreGeometry(settings->value("Geometry").toByteArray());
     restoreState(settings->value("State").toByteArray());
+    settings->endGroup();
 
+    settings->beginGroup("Font");
+    QString family = settings->value("Family").toString();
+    int pointSize = settings->value("PointSize").toInt();
+    int weight = settings->value("Weight").toInt();
+    QString fontSize = settings->value("Size", "32").toString();
     settings->endGroup();
 
     delete settings;
+
+    if (family.length() > 0)
+        m_fontCombo->setCurrentFont(QFont(family, pointSize, weight));
+
+    m_sizeCombo->setCurrentText(fontSize);
 }
 
 void FontChooser::saveWindowState()
@@ -145,7 +143,14 @@ void FontChooser::saveWindowState()
     settings->beginGroup("Window");
     settings->setValue("Geometry", saveGeometry());
     settings->setValue("State", saveState());
+    settings->endGroup();
 
+    settings->beginGroup("Font");
+    QFont font = m_fontCombo->currentFont();
+    settings->setValue("Family", font.family());
+    settings->setValue("PointSize", font.pointSize());
+    settings->setValue("Weight", font.weight());
+    settings->setValue("Size", m_sizeCombo->currentText());
     settings->endGroup();
 
     delete settings;
@@ -154,9 +159,6 @@ void FontChooser::saveWindowState()
 QString FontChooser::settingsFile()
 {
     QString home = QDir::homePath();
-
-    if (home.contains("root"))
-    	return "";
 
     return home + "/qfontchooser.ini";
 }
