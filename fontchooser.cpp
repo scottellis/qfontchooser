@@ -4,6 +4,7 @@
 #include <qformlayout.h>
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qprocess.h>
 
 #include "fontchooser.h"
 
@@ -101,6 +102,11 @@ void FontChooser::closeEvent(QCloseEvent *)
 {
     saveCache();
     saveWindowState();
+
+    QString user = qEnvironmentVariable("USER");
+
+    if (user == "root")
+        QProcess::execute("/sbin/poweroff");
 }
 
 void FontChooser::loadCache()
