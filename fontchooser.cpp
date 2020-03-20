@@ -2,6 +2,8 @@
 #include <qsettings.h>
 #include <qboxlayout.h>
 #include <qformlayout.h>
+#include <qfile.h>
+#include <qtextstream.h>
 
 #include "fontchooser.h"
 
@@ -17,6 +19,7 @@ FontChooser::FontChooser(QWidget *parent)
     connect(m_sizeCombo, SIGNAL(currentIndexChanged(const QString &)), SLOT(sizeChanged(const QString &)));
 
     restoreWindowState();
+    loadCache();
 }
 
 void FontChooser::fontChanged(const QFont &font)
@@ -38,7 +41,10 @@ void FontChooser::sizeChanged(const QString &text)
 void FontChooser::layoutWindow()
 {
     m_fontCombo = new QFontComboBox;
+    m_fontCombo->setEditable(false);
+
     m_sizeCombo = new QComboBox;
+    m_sizeCombo->setEditable(false);
     m_sizeCombo->setMaximumWidth(64);
 
     m_sizeCombo->addItem("10");
@@ -61,10 +67,10 @@ void FontChooser::layoutWindow()
     m_exitBtn = new QPushButton("Exit");
 
     m_edit->setText("In Xanadu did Kubla Khan\n" \
-                           "A stately pleasure-dome decree:\n" \
-                           "Where Alph, the sacred river, ran\n" \
-                           "Through caverns measureless to man\n" \
-                           "   Down to a sunless sea.\n"); 
+                    "A stately pleasure-dome decree:\n" \
+                    "Where Alph, the sacred river, ran\n" \
+                    "Through caverns measureless to man\n" \
+                    "   Down to a sunless sea.\n");
 
     QVBoxLayout *vLayout = new QVBoxLayout;
 
@@ -93,7 +99,36 @@ void FontChooser::layoutWindow()
 
 void FontChooser::closeEvent(QCloseEvent *)
 {
+    saveCache();
     saveWindowState();
+}
+
+void FontChooser::loadCache()
+{
+    QFile file(cacheFile());
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+
+    QTextStream in(&file);
+    QString txt = in.readAll();
+    file.close();
+
+    m_edit->setText(txt);
+}
+
+void FontChooser::saveCache()
+{
+    QFile file(cacheFile());
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
+        return;
+
+    QTextStream out(&file);
+
+    out << m_edit->toPlainText();
+
+    file.close();
 }
 
 void FontChooser::restoreWindowState()
@@ -159,6 +194,11 @@ void FontChooser::saveWindowState()
 QString FontChooser::settingsFile()
 {
     QString home = QDir::homePath();
-
     return home + "/qfontchooser.ini";
+}
+
+QString FontChooser::cacheFile()
+{
+    QString home = QDir::homePath();
+    return home + "/cache.txt";
 }

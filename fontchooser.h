@@ -27,7 +27,11 @@ private:
     void layoutWindow();
     void restoreWindowState();
     void saveWindowState();
+    void loadCache();
+    void saveCache();
+
     QString settingsFile();
+    QString cacheFile();
 
     Ui::FontChooserClass ui;
 
