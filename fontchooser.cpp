@@ -4,7 +4,6 @@
 #include <qformlayout.h>
 #include <qfile.h>
 #include <qtextstream.h>
-#include <qprocess.h>
 
 #include "fontchooser.h"
 
@@ -15,7 +14,7 @@ FontChooser::FontChooser(QWidget *parent)
 
     layoutWindow();
 
-    connect(m_exitBtn, SIGNAL(pressed()), SLOT(onExit()));
+    connect(m_exitBtn, SIGNAL(pressed()), SLOT(close()));
     connect(m_fontCombo, SIGNAL(currentFontChanged(const QFont &)), SLOT(fontChanged(const QFont &)));
     connect(m_sizeCombo, SIGNAL(currentIndexChanged(const QString &)), SLOT(sizeChanged(const QString &)));
 
@@ -98,20 +97,10 @@ void FontChooser::layoutWindow()
     centralWidget()->setLayout(vLayout);
 }
 
-void FontChooser::onExit()
+void FontChooser::closeEvent(QCloseEvent *)
 {
     saveCache();
     saveWindowState();
-
-    QString user = qEnvironmentVariable("USER");
-
-    if (user == "root") {
-        QProcess process;
-        process.startDetached("shutdown -hP now");
-    }
-    else {
-        close();
-    }
 }
 
 void FontChooser::loadCache()
